@@ -9,7 +9,8 @@ const elements = {
   list: document.querySelector('.js-list'),
   guard: document.querySelector('.js-guard'),
 };
-let page = 1;
+let page;
+let maxPages;
 let currentSearch = '';
 
 elements.form.addEventListener('submit', handleSubmit);
@@ -20,6 +21,7 @@ const observer = new IntersectionObserver(handleIntersect, {
 
 async function handleSubmit(e) {
   e.preventDefault();
+  page = 1;
   currentSearch = e.currentTarget.elements.searchQuery.value.replaceAll(
     ' ',
     '+'
@@ -31,8 +33,8 @@ async function handleSubmit(e) {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
+    maxPages = Math.ceil(Number(data.totalHits) / 40);
     Notify.success(`Hooray! We found ${data.totalHits} images.`);
-    console.log(data.hits);
     elements.list.innerHTML = createMarkup(data.hits);
     gallery.refresh();
     observer.observe(elements.guard);
@@ -91,6 +93,10 @@ function createMarkup(arr) {
 
 async function handleIntersect() {
   page += 1;
+  if (maxPages < page) {
+    observer.unobserve(elements.guard);
+    return;
+  }
   try {
     const { data } = await getImages(currentSearch);
     elements.list.insertAdjacentHTML('beforeend', createMarkup(data.hits));
