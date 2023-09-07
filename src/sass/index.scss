@@ -1,2 +1,40 @@
 @import './common';
-@import './example';
+
+ul{
+    list-style: none;
+}
+
+img{
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+header{
+    background-color: blue;
+    position: fixed; 
+    top: 0;   
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.padding{
+    padding-top: 70px;
+    display: block;
+}
+
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
